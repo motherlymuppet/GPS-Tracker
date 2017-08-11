@@ -27,7 +27,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.stevenlowes.tools.randomspicegenerator.database.MainKt</mainClass>
+                                    <mainClass>org.stevenlowes.tools.gpsdatabase.server.MainKt</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
@@ -46,7 +46,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.stevenlowes.tools.randomspicegenerator.database.MainKt</mainClass>
+                            <mainClass>org.stevenlowes.tools.gpsdatabase.server.MainKt</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -146,6 +146,16 @@
             <groupId>org.nanohttpd</groupId>
             <artifactId>nanohttpd</artifactId>
             <version>2.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>1.7.25</version>
         </dependency>
 
     </dependencies>

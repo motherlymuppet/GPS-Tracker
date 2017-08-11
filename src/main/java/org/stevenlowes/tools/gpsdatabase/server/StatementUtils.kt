@@ -30,12 +30,12 @@ fun String.replaceInTags(numbers: List<Int>): String {
     return string
 }
 
-fun PreparedStatement.set(parameterNumber: Int, value: Any?, sqlType: Int){
-    if(value == null){
+fun PreparedStatement.set(parameterNumber: Int, value: Any?, sqlType: Int) {
+    if (value == null) {
         this.setNull(parameterNumber, sqlType)
     }
-    else{
-        when(sqlType){
+    else {
+        when (sqlType) {
             Types.BIGINT -> setLong(parameterNumber, value as Long)
             Types.INTEGER -> setInt(parameterNumber, value as Int)
             Types.VARCHAR -> setString(parameterNumber, value as String)
@@ -45,27 +45,27 @@ fun PreparedStatement.set(parameterNumber: Int, value: Any?, sqlType: Int){
     }
 }
 
-fun ResultSet.getNullableInt(columnName: String): Int?{
+fun ResultSet.getNullableInt(columnName: String): Int? {
     val int = getInt(columnName)
-    return if(wasNull()) null else int
+    return if (wasNull()) null else int
 }
 
-fun ResultSet.getNullableLong(columnName: String): Long?{
+fun ResultSet.getNullableLong(columnName: String): Long? {
     val long = getLong(columnName)
-    return if(wasNull()) null else long
+    return if (wasNull()) null else long
 }
 
-fun ResultSet.getNullableBigDecimal(columnName: String): BigDecimal?{
+fun ResultSet.getNullableBigDecimal(columnName: String): BigDecimal? {
     val decimal = getBigDecimal(columnName)
-    return if(wasNull()) null else decimal
+    return if (wasNull()) null else decimal
 }
 
-fun ResultSet.getNullableString(columnName: String): String?{
+fun ResultSet.getNullableString(columnName: String): String? {
     val string = getString(columnName)
-    return if(wasNull()) null else string
+    return if (wasNull()) null else string
 }
 
-fun ResultSet.getNullableBoolean(columnName: String): Boolean?{
+fun ResultSet.getNullableBoolean(columnName: String): Boolean? {
     val boolean = getBoolean(columnName)
-    return if(wasNull()) null else boolean
+    return if (wasNull()) null else boolean
 }

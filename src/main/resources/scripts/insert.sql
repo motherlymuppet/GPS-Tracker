@@ -1,1 +1,1 @@
-INSERT INTO data (time, van_id, latitude, longitude) VALUES (NOW(), ?, ?, ?);
+INSERT INTO data (time, van_imei, latitude, longitude, speed) VALUES (NOW(), ?, ?, ?, ?);

@@ -3,7 +3,10 @@ package org.stevenlowes.tools.gpsdatabase.server
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.sql.*
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.PreparedStatement
+import java.sql.SQLException
 
 /**
  * Created by Steven on 13/07/2017.
