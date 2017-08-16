@@ -126,7 +126,11 @@ class OutputServer(val localIp: String,
                         val htmlBuilder = StringJoiner(System.lineSeparator())
                         htmlBuilder.add("<!DOCTYPE html>").add("<html>").add("<head>").add("<style>").add("html { height: 100% }").add(
                                 "body { height: 100%; margin: 0px; padding: 0px }").add("#map {").add("height: $height%;").add(
-                                "width: 100%;").add("}").add("</style>").add("</head>").add("<body>").add("<h1>$name</h1>").add(
+                                "width: 100%;").add("}").add("</style>").add("</head>").add("<body>")
+                        if (!noLinks) {
+                            htmlBuilder.add("<h1>$name</h1>")
+                        }
+                        htmlBuilder.add(
                                 "<div id=\"map\"></div>").add("<script>").add("setTimeout(function () {").add("location.reload();").add(
                                 "}, 60 * 1000);").add("function initMap() {").add("var center = {lat: $latCent, lng: $lonCent};").add(
                                 "var map = new google.maps.Map(document.getElementById('map'), {").add("zoom: $zoom,").add(
