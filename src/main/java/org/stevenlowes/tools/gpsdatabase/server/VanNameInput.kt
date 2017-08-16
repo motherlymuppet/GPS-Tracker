@@ -27,6 +27,19 @@ class VanNameInput(values: List<Pair<Long, String?>>) : JPanel(
                                      JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                      JScrollPane.HORIZONTAL_SCROLLBAR_NEVER)
         add(scrollPane, BorderLayout.CENTER)
+
+        val deleteButton = JButton("Delete Van + Van's Data (Cannot be undone!)")
+        deleteButton.addActionListener {
+            val imei = model.selectedValue(table)
+            if (imei != null) {
+                Database.connection.prepareStatement("DELETE FROM vans WHERE vans.imei = ?").use {
+                    it.setLong(1, imei)
+                    it.execute()
+                    JOptionPane.showMessageDialog(null, "Van Deleted. Ignore it, it will disappear on restart.")
+                }
+            }
+        }
+        add(deleteButton)
     }
 
     val scores: Map<Long, String?> get() {
@@ -83,6 +96,15 @@ class VanNameTableModel(values: List<Pair<Long, String?>>) : javax.swing.table.A
 
     val data: Map<Long, String?> get() {
         return tableData.toMap().mapValues { if (it.value.isBlank()) null else it.value }
+    }
+
+    fun selectedValue(table: JTable): Long? {
+        try {
+            return tableData[table.selectedRow].first
+        }
+        catch(e: ArrayIndexOutOfBoundsException) {
+            return null
+        }
     }
 }
 
