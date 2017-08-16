@@ -74,6 +74,8 @@ class OutputServer(val localIp: String,
                 val minutes: Int = parms["minutes"]?.toInt() ?: mins
                 val dayString: String? = parms["day"]
                 val vanParameter: String? = parms["van"]
+                val noLinks: Boolean = if (parms["nolinks"] == "y") true else false
+                val height = if (noLinks) 100 else 80
 
                 Database.connection.prepareStatement(script.toString()).use {
                     var i = 1
@@ -123,7 +125,7 @@ class OutputServer(val localIp: String,
 
                         val htmlBuilder = StringJoiner(System.lineSeparator())
                         htmlBuilder.add("<!DOCTYPE html>").add("<html>").add("<head>").add("<style>").add("html { height: 100% }").add(
-                                "body { height: 100%; margin: 0px; padding: 0px }").add("#map {").add("height: 80%;").add(
+                                "body { height: 100%; margin: 0px; padding: 0px }").add("#map {").add("height: $height%;").add(
                                 "width: 100%;").add("}").add("</style>").add("</head>").add("<body>").add("<h1>$name</h1>").add(
                                 "<div id=\"map\"></div>").add("<script>").add("setTimeout(function () {").add("location.reload();").add(
                                 "}, 60 * 1000);").add("function initMap() {").add("var center = {lat: $latCent, lng: $lonCent};").add(
@@ -166,17 +168,21 @@ class OutputServer(val localIp: String,
 
                         htmlBuilder.add("}").add("</script>").add("<script async defer").add("src=\"https://maps.googleapis.com/maps/api/js?key=$apiKey&callback=initMap\">").add(
                                 "</script>")
-                                .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=30\">Past 30 Mins</a><br>")
-                                .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=60\">Past Hour</a><br>")
-                                .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=1440\">Past 24 Hrs</a><br>")
-                                .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=10080\">Past Week</a><br>")
-                                .add("<a href=\"http://$externalIp:$port/?password=$password&day=${LocalDate.now()}\">Today</a><br>")
-                                .add("<a href=\"http://$externalIp:$port/?password=$password&day=${LocalDate.now().minusDays(
-                                        1)}\">Yesterday</a><br>")
-                                .add("<h2>Single Van View</h2><br>")
 
-                        results.keys.sorted().forEach { htmlBuilder.add("<a href=\"http://$externalIp:$port/?password=$password&day=${LocalDate.now()}&van=$it\">Today: $it only</a><br>") }
+                        if (!noLinks) {
+                            htmlBuilder
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&nolinks=y\">Hide Links</a><br>")
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=30\">Past 30 Mins</a><br>")
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=60\">Past Hour</a><br>")
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=1440\">Past 24 Hrs</a><br>")
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=10080\">Past Week</a><br>")
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&day=${LocalDate.now()}\">Today</a><br>")
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&day=${LocalDate.now().minusDays(
+                                            1)}\">Yesterday</a><br>")
+                                    .add("<h2>Single Van View</h2><br>")
 
+                            results.keys.sorted().forEach { htmlBuilder.add("<a href=\"http://$externalIp:$port/?password=$password&day=${LocalDate.now()}&van=$it\">Today: $it only</a><br>") }
+                        }
                         htmlBuilder.add("</body>").add("</html>")
                         return newFixedLengthResponse(htmlBuilder.toString())
                     }
