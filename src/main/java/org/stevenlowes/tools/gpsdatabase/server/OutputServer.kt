@@ -12,6 +12,7 @@ import java.util.*
 
 class OutputServer(val localIp: String,
                    val port: Int,
+                   val appServerPort: Int,
                    val password: String,
                    val apiKey: String,
                    val mins: Int = 30,
@@ -20,6 +21,7 @@ class OutputServer(val localIp: String,
 
     constructor(localIp: String,
                 port: Int,
+                appServerPort: Int,
                 password: String,
                 apiKey: String,
                 mins: Int?,
@@ -27,6 +29,7 @@ class OutputServer(val localIp: String,
                 externalIp: String?) : this(
             localIp,
             port,
+            appServerPort,
             password,
             apiKey,
             mins ?: 30,
@@ -175,6 +178,7 @@ class OutputServer(val localIp: String,
 
                         if (!fullscreen) {
                             htmlBuilder
+                                    .add("<a href=\"http://$externalIp:$appServerPort\">Download App</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&fullscreen=y\">Fullscreen</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=30\">Past 30 Mins</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=60\">Past Hour</a><br>")

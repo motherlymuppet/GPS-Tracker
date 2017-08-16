@@ -20,6 +20,7 @@ fun main(args: Array<String>) {
     var ip: String? = null
     var inPort: Int? = null
     var outPort: Int? = null
+    var appPort: Int? = null
     var name: String? = null
     var mins: Int? = null
     var pass: String? = null
@@ -51,13 +52,20 @@ fun main(args: Array<String>) {
                     if (iterator.hasNext()) {
                         outPort = iterator.next().toInt()
                         LOGGER.info("OUTPUT PORT: $outPort")
+                        if (iterator.hasNext()) {
+                            appPort = iterator.next().toInt()
+                            LOGGER.info("APP SERVER PORT: $appPort")
+                        }
+                        else {
+                            throw IllegalArgumentException("-p must be followed by three parameters, the port for the input server, then the port for the output server, then the port for the app server")
+                        }
                     }
                     else {
-                        throw IllegalArgumentException("-p must be followed by two parameters, the port for the input server, then the port for the output server")
+                        throw IllegalArgumentException("-p must be followed by three parameters, the port for the input server, then the port for the output server, then the port for the app server")
                     }
                 }
                 else {
-                    throw IllegalArgumentException("-p must be followed by two parameters, the port for the input server, then the port for the output server")
+                    throw IllegalArgumentException("-p must be followed by three parameters, the port for the input server, then the port for the output server, then the port for the app server")
                 }
             }
             "-n" -> {
@@ -108,15 +116,17 @@ fun main(args: Array<String>) {
         }
     }
 
-    if (ip == null || inPort == null || outPort == null || pass == null || apiKey == null) {
+    if (ip == null || inPort == null || outPort == null || appPort == null || pass == null || apiKey == null) {
         throw IllegalArgumentException("-i, -p, -a, and -pw are mandatory parameters. Add -h to view help")
     }
 
     val inputServer = InputServer(ip, inPort)
-    val outputServer = OutputServer(ip, outPort, pass, apiKey, mins, name, externalIp)
+    val outputServer = OutputServer(ip, outPort, appPort, pass, apiKey, mins, name, externalIp)
+    val appServer = AppServer(ip, appPort)
 
     LOGGER.info("Output Server Link: http://${outputServer.externalIp}:$outPort")
     LOGGER.info("Output Server Link (pass-free): http://${outputServer.externalIp}:$outPort/?password=$pass")
+
 
     Runtime.getRuntime().addShutdownHook(object : Thread() {
         override fun run() {
@@ -124,6 +134,8 @@ fun main(args: Array<String>) {
             inputServer.stop()
             outputServer.closeAllConnections()
             outputServer.stop()
+            appServer.closeAllConnections()
+            appServer.stop()
         }
     })
 }
