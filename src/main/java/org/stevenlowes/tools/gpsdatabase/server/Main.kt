@@ -136,6 +136,7 @@ fun main(args: Array<String>) {
             outputServer.stop()
             appServer.closeAllConnections()
             appServer.stop()
+            Database.close()
         }
     })
 }

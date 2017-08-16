@@ -1,5 +1,6 @@
 package org.stevenlowes.tools.randomspicegenerator.database.utils
 
+import org.slf4j.LoggerFactory
 import org.stevenlowes.tools.gpsdatabase.server.Database
 import org.stevenlowes.tools.gpsdatabase.server.getNullableString
 import java.awt.BorderLayout
@@ -30,28 +31,36 @@ class VanNameInput(values: List<Pair<Long, String?>>) : JPanel(
 
         val deleteButton = JButton("Delete Van + Van's Data (Cannot be undone!)")
         deleteButton.addActionListener {
-            val imei = model.selectedValue(table)
-            if (imei != null) {
+            val pair = model.selectedValue(table)
+            if (pair != null) {
+                LOGGER.info("Deleted van: $pair")
                 Database.connection.prepareStatement("DELETE FROM vans WHERE vans.imei = ?").use {
-                    it.setLong(1, imei)
-                    it.execute()
-                    JOptionPane.showMessageDialog(null, "Van Deleted. Ignore it, it will disappear on restart.")
+                    it.setLong(1, pair.first)
+                    val rows = it.executeUpdate()
+                    if (rows == 0) {
+                        JOptionPane.showMessageDialog(null, "Van not deleted, for some reason.")
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Van Deleted. Ignore it, it will disappear on restart.")
+                    }
                 }
             }
         }
-        add(deleteButton)
+        add(deleteButton, BorderLayout.SOUTH)
     }
 
-    val scores: Map<Long, String?> get() {
+    val names: Map<Long, String?> get() {
         return model.data
     }
 
     companion object {
+        val LOGGER = LoggerFactory.getLogger(VanNameInput::class.java)
+
         fun show(values: List<Pair<Long, String?>>): Map<Long, String?>? {
             val panel = VanNameInput(values)
             val pressedOk = showOptionPane(panel, "Act Score Input")
             if (pressedOk) {
-                return panel.scores
+                return panel.names
             }
             else {
                 return null
@@ -98,9 +107,9 @@ class VanNameTableModel(values: List<Pair<Long, String?>>) : javax.swing.table.A
         return tableData.toMap().mapValues { if (it.value.isBlank()) null else it.value }
     }
 
-    fun selectedValue(table: JTable): Long? {
+    fun selectedValue(table: JTable): Pair<Long, String>? {
         try {
-            return tableData[table.selectedRow].first
+            return tableData[table.selectedRow]
         }
         catch(e: ArrayIndexOutOfBoundsException) {
             return null
