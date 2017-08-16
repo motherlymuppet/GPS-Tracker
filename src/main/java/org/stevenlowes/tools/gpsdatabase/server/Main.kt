@@ -1,14 +1,11 @@
 package org.stevenlowes.tools.gpsdatabase.server
 
 import org.slf4j.LoggerFactory
-import org.slf4j.bridge.SLF4JBridgeHandler
 import org.stevenlowes.tools.randomspicegenerator.database.utils.fireVanEditor
 import java.util.logging.Level
 import java.util.logging.LogManager
 
 fun main(args: Array<String>) {
-    SLF4JBridgeHandler.removeHandlersForRootLogger()
-    SLF4JBridgeHandler.install()
     System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace")
 
     val log = LogManager.getLogManager().getLogger("")
