@@ -74,8 +74,8 @@ class OutputServer(val localIp: String,
                 val minutes: Int = parms["minutes"]?.toInt() ?: mins
                 val dayString: String? = parms["day"]
                 val vanParameter: String? = parms["van"]
-                val noLinks: Boolean = if (parms["nolinks"] == "y") true else false
-                val height = if (noLinks) 100 else 80
+                val fullscreen: Boolean = if (parms["fullscreen"] == "y") true else false
+                val height = if (fullscreen) 100 else 80
 
                 Database.connection.prepareStatement(script.toString()).use {
                     var i = 1
@@ -127,7 +127,7 @@ class OutputServer(val localIp: String,
                         htmlBuilder.add("<!DOCTYPE html>").add("<html>").add("<head>").add("<style>").add("html { height: 100% }").add(
                                 "body { height: 100%; margin: 0px; padding: 0px }").add("#map {").add("height: $height%;").add(
                                 "width: 100%;").add("}").add("</style>").add("</head>").add("<body>")
-                        if (!noLinks) {
+                        if (!fullscreen) {
                             htmlBuilder.add("<h1>$name</h1>")
                         }
                         htmlBuilder.add(
@@ -173,9 +173,9 @@ class OutputServer(val localIp: String,
                         htmlBuilder.add("}").add("</script>").add("<script async defer").add("src=\"https://maps.googleapis.com/maps/api/js?key=$apiKey&callback=initMap\">").add(
                                 "</script>")
 
-                        if (!noLinks) {
+                        if (!fullscreen) {
                             htmlBuilder
-                                    .add("<a href=\"http://$externalIp:$port/?password=$password&nolinks=y\">Hide Links</a><br>")
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&fullscreen=y\">Hide Links</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=30\">Past 30 Mins</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=60\">Past Hour</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=1440\">Past 24 Hrs</a><br>")
