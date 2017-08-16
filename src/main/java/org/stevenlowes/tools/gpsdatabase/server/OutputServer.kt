@@ -175,7 +175,7 @@ class OutputServer(val localIp: String,
 
                         if (!fullscreen) {
                             htmlBuilder
-                                    .add("<a href=\"http://$externalIp:$port/?password=$password&fullscreen=y\">Hide Links</a><br>")
+                                    .add("<a href=\"http://$externalIp:$port/?password=$password&fullscreen=y\">Fullscreen</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=30\">Past 30 Mins</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=60\">Past Hour</a><br>")
                                     .add("<a href=\"http://$externalIp:$port/?password=$password&minutes=1440\">Past 24 Hrs</a><br>")
