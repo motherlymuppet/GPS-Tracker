@@ -8,6 +8,7 @@ import java.sql.Date
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 class OutputServer(val localIp: String,
@@ -148,10 +149,13 @@ class OutputServer(val localIp: String,
                             val hexColor = String.format("#%02x%02x%02x", color.red, color.green, color.blue)
                             val lastLoc = list.maxBy { it.time }
                             val minsAgo = Duration.between(LocalDateTime.now(), lastLoc?.time)
+                            val timeAgo = if (minsAgo > Duration.of(10,
+                                                                    ChronoUnit.MINUTES)) ""
+                            else if (minsAgo.toHours() > 0) " ${minsAgo.toHours()}hr ${minsAgo.toMinutes() % 60}min ago" else " ${minsAgo.toMinutes()}min ago"
                             if (lastLoc != null) {
                                 htmlBuilder.add("var marker$van = new google.maps.Marker({").add("position: {lat: ${lastLoc.lat}, lng: ${lastLoc.lon}},").add(
                                         "label: '$van (${(lastLoc.speed * BigDecimal("2.2")).setScale(0,
-                                                                                                      RoundingMode.HALF_UP)} mph) ($minsAgo ago)',").add(
+                                                                                                      RoundingMode.HALF_UP)} mph)$timeAgo',").add(
                                         "map: map").add("});")
                             }
 

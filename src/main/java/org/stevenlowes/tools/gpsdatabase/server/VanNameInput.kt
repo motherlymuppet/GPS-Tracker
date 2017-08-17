@@ -33,6 +33,7 @@ class VanNameInput(values: List<Pair<Long, String?>>) : JPanel(
         deleteButton.addActionListener {
             val pair = model.selectedValue(table)
             if (pair != null) {
+                //TODO fix the delete button
                 LOGGER.info("Deleted van: $pair")
                 Database.connection.prepareStatement("DELETE FROM vans WHERE vans.imei = ?").use {
                     it.setLong(1, pair.first)
