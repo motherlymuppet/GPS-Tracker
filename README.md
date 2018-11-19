@@ -2,7 +2,7 @@
 
 This is a pretty simple GPS tracking server, it uses NanoHTTPD to handle all the http stuff.
 
-It's not secure, it violates best practices in pretty much every way imaginable, and it's perfect.
+It's not secure, it violates best practices in pretty much every way imaginable, and it's perfect (for what it was made for).
 
 For inputting data to the server i used Tasker on android and created apps that were simply
 
