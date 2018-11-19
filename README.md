@@ -10,3 +10,5 @@ For inputting data to the server i used Tasker on android and created apps that 
 1. HTTP GET to input server with location information and IMEI
 1. Wait 1 Minute
 1. GOTO 1
+
+*I don't recommend you use this for anything, unless you are going to copy the exact use case (phones with tasker automatically reporting gps locations)*
